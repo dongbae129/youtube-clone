@@ -1,7 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const db = require("./models");
 const app = express();
+db.sequelize.sync();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
