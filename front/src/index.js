@@ -2,23 +2,34 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import App from "./App";
-import "antd/dist/antd.css";
+// import "antd/dist/antd.css";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
-import { applyMiddleware, createStore } from "redux";
+import { applyMiddleware, createStore, compose } from "redux";
 import promiseMiddleware from "redux-promise";
-import ReduxSaga from "redux-saga";
+import createSagaMiddleware from "redux-saga";
+import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./reducers";
+import rootSaga from "./sagas";
 
-const store = applyMiddleware(promiseMiddleware, ReduxSaga)(createStore);
+const sagaMiddleware = createSagaMiddleware();
+const middleware = [sagaMiddleware];
+const enhancer =
+  process.env.NODE_ENV === "production"
+    ? compose(applyMiddleware(...middleware))
+    : composeWithDevTools(applyMiddleware(...middleware));
+const store = createStore(rootReducer, enhancer);
+sagaMiddleware.run(rootSaga);
+// const store = applyMiddleware(promiseMiddleware, ReduxSaga)(createStore);
 
 ReactDOM.render(
   <Provider
-    store={store(
-      rootReducer,
-      window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__()
-    )}
+    store={
+      store //(
+      //rootReducer,
+      //window.__REDUX_DEVTOOLS_EXTENSION__ &&
+      //        window.__REDUX_DEVTOOLS_EXTENSION__()
+    } //)
   >
     <App />
   </Provider>,

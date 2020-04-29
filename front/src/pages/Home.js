@@ -1,9 +1,15 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 function Home() {
-  // useEffect(() => {
-  //   axios.get("/api/hello").then((res) => console.log(res));
-  // }, []);
+  useEffect(() => {
+    axios
+      .post("/api/hello", {
+        nickname: "aaa",
+        userId: "AAA",
+        password: "123",
+      })
+      .then((res) => console.log(res));
+  }, []);
   return <div>This is Home</div>;
 }
 
