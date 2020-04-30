@@ -22,6 +22,31 @@ router.post("/", async (req, res) => {
     console.error(e);
   }
 });
+router.post("/signup", async (req, res, next) => {
+  try {
+    console.log(req.body, "@@@@@@");
+    const useringId = await db.User.findOne({
+      where: { userId: req.body.userId },
+    });
+    if (useringId) {
+      return res.status(400).send("이미 사용중인 아이디 입니다");
+    }
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    const user = await db.User.create({
+      userId: req.body.userId,
+      nickname: req.body.nickname,
+      password: hashedPassword,
+    });
+    const sendUser = await db.User.findOne({
+      where: { userId: req.body.userId },
+      attributes: ["nickname", "userId"],
+    });
+    return res.status(200).json(sendUser);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
 router.post("/login", (req, res) => {
   res.send("QQQQQQQQQQQQQQQQQ");
 });

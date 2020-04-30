@@ -4,6 +4,9 @@ import {
   LOG_IN_REQUEST,
   LOG_IN_FAILURE,
   LOG_IN_SUCCESS,
+  SIGN_UP_REQUEST,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
 } from "../reducers/user";
 
 function logInAPI(logInData) {
@@ -29,6 +32,29 @@ function* watchLogin() {
   yield takeEvery(LOG_IN_REQUEST, logIn);
 }
 
+function signUpAPI(signUpData) {
+  return axios.post("/api/user/signup", signUpData);
+}
+function* signUp(action) {
+  try {
+    const result = yield call(signUpAPI, action.data);
+    yield put({
+      type: SIGN_UP_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchSignup() {
+  yield takeEvery(SIGN_UP_REQUEST, signUp);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLogin)]);
+  yield all([fork(watchLogin), fork(watchSignup)]);
 }
