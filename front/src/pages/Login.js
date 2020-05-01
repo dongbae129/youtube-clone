@@ -16,7 +16,7 @@ const LoginForm = styled.form`
 `;
 
 function Login(props) {
-  const [email, setEmail] = useState("");
+  const [userId, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { me, loginsuccess } = useSelector((state) => state.user);
   const nickname = "a3a3a";
@@ -29,12 +29,12 @@ function Login(props) {
   };
   const onSubmitForm = (e) => {
     e.preventDefault();
-    console.log(email, password);
+    console.log(userId, password);
     dispatch({
       type: LOG_IN_REQUEST,
       data: {
         nickname,
-        userId: email,
+        userId,
         password,
       },
     });
@@ -46,7 +46,7 @@ function Login(props) {
     //   })
     //   .then((res) => console.log(res));
 
-    props.history.push("/");
+    // props.history.push("/");
   };
   useEffect(() => {
     console.log(me, "MEMEMEM");
@@ -55,8 +55,8 @@ function Login(props) {
   return (
     <LoginDiv>
       <LoginForm onSubmit={onSubmitForm}>
-        <label>Email</label>
-        <input type="text" value={email} onChange={onChangeEmail} />
+        <label>Id</label>
+        <input type="text" value={userId} onChange={onChangeEmail} />
         <label>Password</label>
         <input type="password" value={password} onChange={onChangePassword} />
         <br />
