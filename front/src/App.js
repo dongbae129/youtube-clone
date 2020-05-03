@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import styled from "styled-components";
 import Upload from "./pages/Upload";
+import { Button } from "antd";
 
 const AppLi = styled.li`
   margin-right: 10px;
@@ -32,6 +33,7 @@ function App() {
         <AppLi>
           <Link to="/product/upload">Upload</Link>
         </AppLi>
+        <Button>aasd</Button>
       </ul>
       <hr />
       <Route path="/" component={Home} exact />
