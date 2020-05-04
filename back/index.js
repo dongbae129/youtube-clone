@@ -7,7 +7,9 @@ const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const expressSession = require("express-session");
+
 const userAPIRouter = require("./routes/user");
+const productAPIRouter = require("./routes/product");
 const passport = require("passport");
 const passportConfig = require("./passport");
 db.sequelize.sync();
@@ -16,6 +18,8 @@ dotenv.config();
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 app.use(morgan("dev"));
+app.use("/", express.static("uploads"));
+
 app.use(express.json());
 app.use(
   cors({
@@ -42,6 +46,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/api/user", userAPIRouter);
+app.use("/api/product", productAPIRouter);
 
 app.post("/api/hello", (req, res) => {
   res.send("Hellllllo");
