@@ -10,6 +10,7 @@ const expressSession = require("express-session");
 
 const userAPIRouter = require("./routes/user");
 const productAPIRouter = require("./routes/product");
+const productsAPIRouter = require("./routes/products");
 const passport = require("passport");
 const passportConfig = require("./passport");
 db.sequelize.sync();
@@ -47,6 +48,7 @@ app.use(passport.session());
 
 app.use("/api/user", userAPIRouter);
 app.use("/api/product", productAPIRouter);
+app.use("/api/products", productsAPIRouter);
 
 app.post("/api/hello", (req, res) => {
   res.send("Hellllllo");

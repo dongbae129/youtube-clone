@@ -7,6 +7,9 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
+  GET_USER_SUCCESS,
+  GET_USER_FAILURE,
+  GET_USER_REQUEST,
 } from "../reducers/user";
 
 function logInAPI(logInData) {
@@ -57,6 +60,28 @@ function* watchSignup() {
   yield takeEvery(SIGN_UP_REQUEST, signUp);
 }
 
+function getUserAPI() {
+  return axios.get("/api/user");
+}
+function* getUser(action) {
+  try {
+    const result = yield call(getUserAPI);
+    yield put({
+      type: GET_USER_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: GET_USER_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchgetUser() {
+  yield takeEvery(GET_USER_REQUEST, getUser);
+}
 export default function* userSaga() {
-  yield all([fork(watchLogin), fork(watchSignup)]);
+  yield all([fork(watchLogin), fork(watchSignup), fork(watchgetUser)]);
 }

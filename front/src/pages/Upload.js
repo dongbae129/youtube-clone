@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+
 import { Typography, Input, Button } from "antd";
 import FileUpload from "../components/FileUpload";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { UPLOAD_PRODUCT_REQUEST } from "../reducers/product";
 
 const { Title } = Typography;
 const { TextArea } = Input;
 
-const Continents = [
+export const Continents = [
   { key: 1, value: "Africa" },
   { key: 2, value: "Europe" },
   { key: 3, value: "Asia" },
@@ -17,13 +18,14 @@ const Continents = [
   { key: 7, value: "Antarctica" },
 ];
 
-function Upload() {
+function Upload(props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [continent, setContinent] = useState("");
   const [image, setImage] = useState([]);
-  const { imagePaths } = useSelector((state) => state.product);
+  const { imagePaths, uploadSuccess } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setImage([...imagePaths]);
@@ -37,9 +39,18 @@ function Upload() {
   const onChangePrice = (e) => {
     setPrice(e.target.value);
   };
+
   const onSubmitForm = (e) => {
     e.preventDefault();
-    console.log(name, description, price, image);
+    dispatch({
+      type: UPLOAD_PRODUCT_REQUEST,
+      data: { name, description, price, continent, image },
+    });
+    if (uploadSuccess) {
+      props.history.push("/");
+    }
+
+    console.log(name, description, price, image, continent);
   };
   const onChangeContinent = (e) => {
     setContinent(e.target.value);
@@ -55,7 +66,13 @@ function Upload() {
         <br />
         <br />
         <label htmlFor="name">이름</label>
-        <Input id="name" type="text" onChange={onChangeName} value={name} />
+        <Input
+          required
+          id="name"
+          type="text"
+          onChange={onChangeName}
+          value={name}
+        />
         <br />
         <br />
         <label htmlFor="description">설명</label>
@@ -71,9 +88,9 @@ function Upload() {
         <Input id="price" type="text" onChange={onChangePrice} value={price} />
         <br />
         <br />
-        <select onChange={onChangeContinent}>
+        <select defaultValue="Africa" onChange={onChangeContinent}>
           {Continents.map((item) => (
-            <option key={item.key} value={continent}>
+            <option key={item.key} value={item.value}>
               {item.value}
             </option>
           ))}

@@ -11,8 +11,19 @@ export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
 export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
 
+export const GET_USER_REQUEST = "GET_USER_REQUEST";
+export const GET_USER_SUCCESS = "GET_USER_SUCCESS";
+export const GET_USER_FAILURE = "GET_USER_FAILURE";
+
+export const ADD_CART_TO_ME = "ADD_CART_TO_ME";
+
 export default (state = initialState, action) => {
   switch (action.type) {
+    case ADD_CART_TO_ME: {
+      return {
+        ...state,
+      };
+    }
     case LOG_IN_REQUEST:
       return {
         ...state,
@@ -41,6 +52,19 @@ export default (state = initialState, action) => {
       return {
         ...state,
         signupErrorReason: action.error,
+      };
+    case GET_USER_REQUEST:
+      return {
+        ...state,
+      };
+    case GET_USER_SUCCESS:
+      return {
+        ...state,
+        me: action.data,
+      };
+    case GET_USER_FAILURE:
+      return {
+        ...state,
       };
 
     default:

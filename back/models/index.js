@@ -10,12 +10,17 @@ let sequelize = new Sequelize(
   config
 );
 
+db.User = require("./user")(sequelize, Sequelize);
+db.Image = require("./image")(sequelize, Sequelize);
+db.Product = require("./product")(sequelize, Sequelize);
+db.Cart = require("./cart")(sequelize, Sequelize);
+
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
-db.User = require("./user")(sequelize, Sequelize);
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

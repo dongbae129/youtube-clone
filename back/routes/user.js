@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 // var passport = require("passport"),
 //   LocalStrategy = require("passport-local").Strategy;
-
+const { isLoggedIn } = require("./middleware");
 const router = express.Router();
 const db = require("../models");
 
@@ -50,6 +50,11 @@ router.post("/login", (req, res, next) => {
         }
         const finalUser = await db.User.findOne({
           where: { id: user.id },
+          include: [
+            {
+              model: db.Cart,
+            },
+          ],
         });
         return res.json(finalUser);
       } catch (e) {
@@ -62,7 +67,6 @@ router.post("/login", (req, res, next) => {
 
 router.post("/signup", async (req, res, next) => {
   try {
-    console.log(req.body, "@@@@@@");
     const useringId = await db.User.findOne({
       where: { userId: req.body.userId },
     });
@@ -81,6 +85,24 @@ router.post("/signup", async (req, res, next) => {
     console.error(e);
     next(e);
   }
+});
+
+router.get("/", isLoggedIn, async (req, res) => {
+  console.log("!!!!!!!!!!!!!!!!!!!!!");
+  if (!req.user) {
+    return res.status(401).send("로그인이 필요합니다.");
+  }
+  const user = await db.User.findOne({
+    where: { userId: req.user.userId },
+    include: [
+      {
+        model: db.Cart,
+      },
+    ],
+  });
+  // const user = Object.assign({}, req.user.toJSON());
+  // delete user.password;
+  return res.json(user);
 });
 
 module.exports = router;

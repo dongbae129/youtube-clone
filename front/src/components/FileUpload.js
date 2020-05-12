@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { FiPlus } from "react-icons/fi";
-import aixos from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { UPLOAD_IMAGE_REQUEST, REMOVE_IMAGE } from "../reducers/product";
 
